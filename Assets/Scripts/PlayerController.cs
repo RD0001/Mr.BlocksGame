@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,11 +9,16 @@ public class PlayerController : MonoBehaviour
     public float speed;
     public float initialSpeed;
     public float acceleration;
+    public GameObject gameWonUI;
+    public GameObject gameResumeUI;
 
     // Start is called before the first frame update
     void Start()
     {
         initialSpeed = speed;
+        gameWonUI.SetActive(false);
+        gameResumeUI.SetActive(false);
+        Time.timeScale = 1f;
     }
 
     // Update is called once per frame
@@ -50,6 +56,23 @@ public class PlayerController : MonoBehaviour
                 rigidbody2d.velocity = new Vector2(0f, -speed);
             }
         }
+
+        if(Input.GetKey(KeyCode.Escape)) 
+        {
+            Time.timeScale = 0f;
+            gameResumeUI.SetActive(true);
+        }
+    }
+
+    public void Resume()
+    {
+        Time.timeScale = 1f;
+        gameResumeUI.SetActive(false);
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(0);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -57,6 +80,7 @@ public class PlayerController : MonoBehaviour
         if(collision.tag == "Door")
         {
             Debug.Log("Level completed");
+            gameWonUI.SetActive(true);
         }
     }
 }
