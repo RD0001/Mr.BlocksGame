@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public float initialSpeed;
     public float acceleration;
     public GameObject gameWonUI;
+    public GameObject gameLostUI;
     public GameObject gameResumeUI;
 
     // Start is called before the first frame update
@@ -72,15 +73,22 @@ public class PlayerController : MonoBehaviour
 
     public void Restart()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.tag == "Door")
         {
-            Debug.Log("Level completed");
             gameWonUI.SetActive(true);
+        }else if(collision.tag == "Enemy")
+        {
+            gameLostUI.SetActive(true);
         }
     }
 }
